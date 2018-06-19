@@ -1,0 +1,22 @@
+<% include head.ejs %>
+<h1>registratie formulier</h1>
+<p>Je kan jezelf hier inschrijven als lid van dit datingplatform</p>
+<form action=/register method=post enctype=multipart/form-data>
+  <label>Naam <input name=name></label>
+  <label>
+    Profielfoto
+    <input
+      name=cover
+      type=file
+      accept=image/*
+      >
+      </label>
+  <label>leeftijd<input name=age></label>
+<label>Beschrijving
+<textarea name=description rows=5></textarea>
+</label>
+<label>gebruikersnaam<input name=username></label>
+<label>Wachtwoord<input name=password></label>
+<button>Registreer</button>
+</form>
+<% include tail.ejs %>

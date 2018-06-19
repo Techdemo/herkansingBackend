@@ -1,0 +1,23 @@
+<!doctype html>
+<link rel=stylesheet href=/index.css>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <nav class="nav-extended">
+    <div class="nav-content">
+      <ul class="tabs tabs-transparent">
+        <li class="tab"><a href="/register">Registreer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+<h1>Log In</h1>
+<p>Log in met behulp van het onderstaande formulier</p>
+<form action=/login method=post>
+  <label>Gebruikersnaam<input name=username></label>
+  <label>Wachtwoord<input name=password></label>
+  <button>Log in</button>
+</form>
+
+
+
+<% include tail.ejs %>

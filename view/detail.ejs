@@ -1,0 +1,20 @@
+<% include head.ejs %>
+<title><%= data.name %> - Dating app</title>
+<h1><%= data.name %></h1>
+<% if (data.cover) { %>
+<img
+  alt
+  src="/upload/<%= data.cover %>"
+>
+<% } %>
+<p><%= data.description %></p>
+<p><%= data.age %></p>
+<p>
+  <button
+    id=js-remove
+  data-id="<%= data._id %>"
+  class=danger>Verwijder</button>
+</p>
+<p><a href="/members">Terug naar lijst</a></p>
+
+<% include tail.ejs %>

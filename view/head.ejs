@@ -1,0 +1,22 @@
+<!doctype html>
+<link rel=stylesheet href=/index.css>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <nav class="nav-extended">
+    <div class="nav-content">
+      <ul class="tabs tabs-transparent">
+        <!-- Als er geen currentUser value is, dan laat je de onderstaande regel zien -->
+        <% if(!currentUser) { %> <li class="tab"><a href="/">log in</a></li> <% } %>
+        <% if(currentUser){ %><li class="tab"><a href="/account">Account</a></li>
+                              <li class="tab"><a href="">Hallo, <%= name %></a></li>
+                              <li class="tab"><a href="/logout">Log uit</a></li>
+                               <% } %>
+      </ul>
+    </div>
+    <div class="nav-content">
+      <ul class="tabs">
+        <li class="tab"><a href="/members">overzicht</a></li>
+        <li class="tab"><a href="/matches">Matches</a></li>
+        <li class="tab"><a href="/message">Berichten</a></li>
+      </ul>
+    </div>
+  </nav>
