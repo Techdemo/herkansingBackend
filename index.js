@@ -8,6 +8,7 @@ var mongoose = require('mongoose')
 var session = require('express-session')
 var MongoStore = require('connect-mongo')(session)
 var User = require('./models/user')
+const app = express()
 
 
 require('dotenv').config()
@@ -39,20 +40,23 @@ express()
   .get('/account', account)
   .get('/matches', matches)
   .get('/message', message)
-  .get('/', login)
   .get('/:id', member)
   .delete('/:id', remove)
+  .get('/', login)
   .use(notFound)
   .listen(8000)
 
-// Make user ID available in templates
+function userId(req, res, next) {
+  res.locals.currentUser = req.session.userId;
+  next();
+};
 
-
-function login(req, res){
+function login(req, res, next){
 res.render('login.ejs')
   }
 
 function loginRoute (req, res, next){
+
   if (req.body.username && req.body.password) {
     User.authenticate(req.body.username, req.body.password, function(error, user){
         if (error || !user) {
@@ -60,40 +64,36 @@ function loginRoute (req, res, next){
           err.status = 401;
           next(err);
         } else {
-          req.session.userId = user._id;
+          req.session.userId = user.id;
           res.redirect('/account');
         }
       });
-    } else {
-        console.log("eerste else")
+        } else {
+
       }
   }
-
-function userId(req, res, next) {
-  res.locals.currentUser = req.session.userId;
-  console.log("sessionID functie is begonnen");
-  next();
-};
 
 function members(req, res) {
   db.collection('users').find().toArray(done)
-
-  function done(err, data) {
-    if(err) {
-      next(err)
-      } else {
-        res.render('list.ejs', {data: data})
-      }
-    }
-  }
+   function done(err, data) {
+     if(err) {
+       next(err)
+       } else {
+         res.render('list.ejs', {data: data})
+       }
+     }
+   }
 
 function member(req, res, next){
-  var id = req.params.id
-
-  db.collection('users').findOne({
-  _id: new mongo.ObjectID(id)
-  }, done)
+var id;
+  try {
+    new mongo.ObjectID(req.params.id)
+    } catch (err) {
+  return next();
+    }
+db.collection('users').findOne({_id: id}, done)
     function done(err, data) {
+
       if (err) {
         next(err)
       } else {
@@ -101,21 +101,39 @@ function member(req, res, next){
       }
     }
   }
-
 function form(req, res){
-
   res.render('register.ejs')
 }
-
 function notFound(req, res) {
   res.status(404).render('not-found.ejs')
 }
 function matches(req, res){
-  res.render('matches.ejs')
+    if (!req.session.userId) {
+      var err = new Error("Je bent niet bevoegd om de inhoud van deze pagina te bekijken");
+      err.status = 403;
+      return next(err);
+    }
+      User.findById(req.session.userId)
+        .exec(function (err, users){
+          if (err) {
+            console.log("in find by id is er dus geen error")
+            return next(err);
+          } else {
+            res.render('matches', {
+              title: 'matches',
+              name: users.name,
+              description: users.description,
+              cover: users.cover,
+              age: users.age,
+              id: users.id});
+          }
+        });
 }
+
 function message(req, res){
   res.render('message.ejs')
 }
+
 function account(req, res, next){
   if (!req.session.userId) {
     var err = new Error("Je bent niet bevoegd om de inhoud van deze pagina te bekijken");
@@ -128,12 +146,16 @@ function account(req, res, next){
           console.log("in find by id is er dus geen error")
           return next(err);
         } else {
-          res.render('account', { title: 'account', name: users.name, description: users.descripton });
+          res.render('account', {
+            title: 'account',
+            name: users.name,
+            description: users.description,
+            cover: users.cover,
+            age: users.age,
+            id: users.id});
         }
       });
   }
-
-
 function register(req, res, next){
       var userData = {
         name: req.body.name,
@@ -153,7 +175,6 @@ function register(req, res, next){
     }
   });
 }
-
 function remove(req, res, next) {
  var id = req.params.id
 
