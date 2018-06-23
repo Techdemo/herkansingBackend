@@ -1,14 +1,14 @@
-var express = require('express')
-var find = require('array-find')
-var slug = require('slug')
-var bodyParser = require('body-parser')
-var multer = require('multer')
-var mongo = require('mongodb')
-var mongoose = require('mongoose')
-var session = require('express-session')
-var MongoStore = require('connect-mongo')(session)
-var User = require('./models/user')
-const app = express()
+const express = require('express')
+const find = require('array-find')
+const slug = require('slug')
+const bodyParser = require('body-parser')
+const multer = require('multer')
+const mongo = require('mongodb')
+const mongoose = require('mongoose')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const User = require('./models/user')
+
 
 
 require('dotenv').config()
@@ -19,7 +19,13 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 var upload = multer({dest: 'static/upload/'})
 
-express()
+const login = require('./routes/login'),
+      register = require('./routes/register')
+
+
+
+
+const app = express()
   .use(express.static('static'))
   .use(bodyParser.urlencoded({extended: true}))
   .use(session({
@@ -33,16 +39,16 @@ express()
   .use(userId)
   .set('view engine', 'ejs')
   .set('views', 'view')
-  .post('/register', upload.single('cover'), register)
+  .post('/registerUser', upload.single('cover'), register.user)
   .post('/login', loginRoute)
-  .get('/register', form)
+  .get('/register', register.render)
   .get('/members', members)
   .get('/account', account)
   .get('/matches', matches)
   .get('/message', message)
   .get('/:id', member)
   .delete('/:id', remove)
-  .get('/', login)
+  .get('/', login.render)
   .use(notFound)
   .listen(8000)
 
@@ -51,12 +57,8 @@ function userId(req, res, next) {
   next();
 };
 
-function login(req, res, next){
-res.render('login.ejs')
-  }
 
 function loginRoute (req, res, next){
-
   if (req.body.username && req.body.password) {
     User.authenticate(req.body.username, req.body.password, function(error, user){
         if (error || !user) {
@@ -101,12 +103,11 @@ db.collection('users').findOne({_id: id}, done)
       }
     }
   }
-function form(req, res){
-  res.render('register.ejs')
-}
+
 function notFound(req, res) {
   res.status(404).render('not-found.ejs')
 }
+
 function matches(req, res){
     if (!req.session.userId) {
       var err = new Error("Je bent niet bevoegd om de inhoud van deze pagina te bekijken");
@@ -156,25 +157,7 @@ function account(req, res, next){
         }
       });
   }
-function register(req, res, next){
-      var userData = {
-        name: req.body.name,
-        cover: req.file.filename,
-        age: req.body.age,
-        description: req.body.description,
-        username: req.body.username,
-        password: req.body.password
-        };
-        // Schema create method om document in Mongo te zetten
-  User.create(userData, function (error, user){
-    if (error) {
-      next(error);
-  } else {
-    req.session.userId = user._id;
-    return res.redirect('/members');
-    }
-  });
-}
+
 function remove(req, res, next) {
  var id = req.params.id
 
