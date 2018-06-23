@@ -20,7 +20,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 var upload = multer({dest: 'static/upload/'})
 
 const login = require('./routes/login'),
-      register = require('./routes/register')
+      register = require('./routes/register'),
+      members = require('./routes/members')
 
 
 
@@ -42,7 +43,7 @@ const app = express()
   .post('/registerUser', upload.single('cover'), register.user)
   .post('/login', loginRoute)
   .get('/register', register.render)
-  .get('/members', members)
+  .get('/members', members.render)
   .get('/account', account)
   .get('/matches', matches)
   .get('/message', message)
@@ -54,6 +55,7 @@ const app = express()
 
 function userId(req, res, next) {
   res.locals.currentUser = req.session.userId;
+  console.log(res.locals.currentUser);
   next();
 };
 
@@ -71,38 +73,32 @@ function loginRoute (req, res, next){
         }
       });
         } else {
-
       }
   }
 
-function members(req, res) {
-  db.collection('users').find().toArray(done)
-   function done(err, data) {
-     if(err) {
-       next(err)
-       } else {
-         res.render('list.ejs', {data: data})
-       }
-     }
-   }
 
 function member(req, res, next){
+console.log(req.url)
 var id;
   try {
     new mongo.ObjectID(req.params.id)
+    console.log(req.url);
     } catch (err) {
   return next();
     }
-db.collection('users').findOne({_id: id}, done)
+db.collection('users').findOne({id: id}, done)
     function done(err, data) {
-
       if (err) {
         next(err)
       } else {
+
         res.render('detail.ejs', {data: data})
       }
     }
   }
+
+
+
 
 function notFound(req, res) {
   res.status(404).render('not-found.ejs')

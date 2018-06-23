@@ -2,7 +2,7 @@
 <title>Members - Dating app</title>
 <p>
 <a href="/register">Registreer nieuwe gebruiker</a>
-</p> 
+</p>
 <h1>alle leden</h1>
 <% for (var index = 0; index < data.length; index++) { %>
   <div class="row">
@@ -22,7 +22,7 @@
           <p><%= data[index].age %></p>
         </div>
         <div class="card-action">
-          <a href="<%= data[index]._id %>">Bekijk profiel</a>
+          <a href="<%= data._id %>">Bekijk profiel</a>
           <a href="">Like</a>
         </div>
       </div>
