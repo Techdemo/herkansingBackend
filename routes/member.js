@@ -11,12 +11,31 @@ var User = require('../models/user')
 var db = mongoose.connection;
 
 
-function member(req, res, next) {
-  var id = req.params.id
+// function member(req, res, next) {
+// var id = req.params.id
+// db.collection('users').findOne({
+//     _id: new mongo.ObjectID(id)
+// }, done)
+//
+//
+//   function done(err, data) {
+//     if (err) {
+//       next(err)
+//     } else {
+//       res.render('detail.ejs', {data: data})
+//     }
+//   }
+//
+// }
 
-  db.collection('users').findOne({
-    _id: new mongo.ObjectID(id)
-  }, done)
+function member(req, res, next){
+var id;
+try {
+  new mongo.ObjectID(req.params.id)
+} catch (err) {
+ return next();
+}
+db.collection('users').fineOne({_id: id}, done)
 
   function done(err, data) {
     if (err) {
@@ -25,7 +44,6 @@ function member(req, res, next) {
       res.render('detail.ejs', {data: data})
     }
   }
-
 }
 
 module.exports = {

@@ -11,6 +11,7 @@ var User = require('./models/user')
 
 
 
+
 require('dotenv').config()
 
 mongoose.connect("mongodb://localhost:27017/dateapp");
@@ -23,7 +24,8 @@ var login = require('./routes/login'),
       register = require('./routes/register'),
       members = require('./routes/members'),
       member = require('./routes/member'),
-      edit = require('./routes/edit')
+      edit = require('./routes/edit'),
+      message = require('./routes/message')
 
 var app = express()
   .use(express.static('static'))
@@ -42,15 +44,15 @@ var app = express()
   .post('/registerUser', upload.single('cover'), registerUser)
   .post('/editUser', editUser)
   .post('/login', loginRoute)
+  .get('/', login.render)
   .get('/register', register.render)
   .get('/members', members.render)
   .get('/account', account)
   .get('/matches', matches)
-  .get('/message', message)
+  .get('/message', message.render )
   .get('/:id', member.render)
   .get('/edit/:id', edit.render)
   .delete('/:id', remove)
-  .get('/', login.render)
   .use(notFound)
   .listen(8000)
 
@@ -68,8 +70,8 @@ function registerUser(req, res, next){
     if (error) {
       next(error);
   } else {
-    // req.session.userId = user._id;
-    return res.redirect('/members');
+    req.session.userId = user.id;
+    return res.redirect('/account');
     }
   });
 }
@@ -122,11 +124,6 @@ function matches(req, res){
           }
         });
 }
-
-function message(req, res){
-  res.render('message.ejs')
-}
-
 function account(req, res, next){
   if (!req.session.userId) {
     var err = new Error("Je bent niet bevoegd om de inhoud van deze pagina te bekijken");
@@ -153,13 +150,12 @@ function account(req, res, next){
   }
 
 function editUser(req, res){
-      let updateUser = {};
-        updateUser.name = req.body.name;
-        updateUser.age = req.body.age;
-        updateUser.description = req.body.description;
+  let updateUser = {};
+    updateUser.name = req.body.name;
+    updateUser.age = req.body.age;
+    updateUser.description = req.body.description;
   let query = {id:req.params.id}
-
-        // Schema create method om document in Mongo te zetten
+  // Schema create method om document in Mongo te zetten
   User.update(query, updateUser, function(err){
     if(err){
       console.log(err);
