@@ -9,9 +9,6 @@ var session = require('express-session')
 var MongoStore = require('connect-mongo')(session)
 var User = require('./models/user')
 
-
-
-
 require('dotenv').config()
 
 mongoose.connect("mongodb://localhost:27017/dateapp");
@@ -51,8 +48,8 @@ var app = express()
   .get('/matches', matches)
   .get('/message', message.render )
   .get('/:id', member.render)
-  .get('/edit/:id', edit.render)
   .delete('/:id', remove)
+  .get('/edit/:id', edit.render)
   .use(notFound)
   .listen(8000)
 
