@@ -12,18 +12,40 @@ var socket = require('socket.io')
 var app = express();
 var server = app.listen(4000)
 
+
+// io.on('connection', function(socket){
+//   console.log("socket connection gemaakt", socket.id);
+//
+//   socket.on('chat', function(data){
+//       io.sockets.emit('chat', data);
+// });
+// socket.on('typing', function(data){
+//   socket.broadcast.emit('typing', data)
+//   })
+// });
+
 var io = socket(server);
+io.on('connection', (socket) => {
 
-io.on('connection', function(socket){
-  console.log("socket connection gemaakt", socket.id);
+    console.log('made socket connection', socket.id);
 
-  socket.on('chat', function(data){
-      io.sockets.emit('chat', data);
+    // Handle chat event
+    socket.on('chat', function(data){
+        // console.log(data);
+        io.sockets.emit('chat', data);
+    });
+
+    // Handle typing event
+    socket.on('typing', function(data){
+        socket.broadcast.emit('typing', data);
+    });
+
 });
-socket.on('typing', function(data){
-  socket.broadcast.emit('typing', data)
-  })
-});
+
+
+
+
+
 
 function message(req, res){
     if (!req.session.userId) {
