@@ -10,8 +10,16 @@ var MongoStore = require('connect-mongo')(session)
 var User = require('../models/user')
 var db = mongoose.connection;
 
-
 function member(req, res, next){
+
+var id;
+try {
+  new mongo.ObjectID(req.params.id)
+} catch (err) {
+  return next();
+}
+
+
 var id = req.params.id;
 
 db.collection('users').findOne({_id: mongo.ObjectId(id)}, done)

@@ -46,7 +46,7 @@ var app = express()
   .get('/members', members.render)
   .get('/account', account)
   .get('/matches', matches)
-  .get('/message', message.render )
+  .get('/message', message.render)
   .get('/:id', member.render)
   .delete('/:id', remove)
   .get('/edit/:id', edit.render)
@@ -95,11 +95,7 @@ function loginRoute (req, res, next){
       }
   }
 
-function notFound(req, res) {
-  res.status(404).render('not-found.ejs')
-}
-
-function matches(req, res){
+function matches(req, res, next){
     if (!req.session.userId) {
       var err = new Error("Je bent niet bevoegd om de inhoud van deze pagina te bekijken");
       err.status = 403;
@@ -146,7 +142,7 @@ function account(req, res, next){
       });
   }
 
-function editUser(req, res){
+function editUser(req, res, next){
   let updateUser = {};
     updateUser.name = req.body.name;
     updateUser.age = req.body.age;
@@ -176,4 +172,8 @@ function remove(req, res, next) {
       res.json({status: 'ok'})
     }
   }
+}
+
+function notFound(req, res) {
+  res.status(404).render('not-found.ejs')
 }
