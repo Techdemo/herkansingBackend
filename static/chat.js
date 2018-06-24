@@ -1,3 +1,5 @@
+// Thanks to the netninja for providing me with information to set up the user chat function. 
+
 // Make connection
 var socket = io.connect('http://localhost:4000');
 
