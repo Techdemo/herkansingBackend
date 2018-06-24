@@ -22,7 +22,8 @@ var upload = multer({dest: 'static/upload/'})
 var login = require('./routes/login'),
       register = require('./routes/register'),
       members = require('./routes/members'),
-      member = require('./routes/member')
+      member = require('./routes/member'),
+      edit = require('./routes/edit')
 
 var app = express()
   .use(express.static('static'))
@@ -39,6 +40,7 @@ var app = express()
   .set('view engine', 'ejs')
   .set('views', 'view')
   .post('/registerUser', upload.single('cover'), registerUser)
+  .post('/editUser', editUser)
   .post('/login', loginRoute)
   .get('/register', register.render)
   .get('/members', members.render)
@@ -46,6 +48,7 @@ var app = express()
   .get('/matches', matches)
   .get('/message', message)
   .get('/:id', member.render)
+  .get('/edit/:id', edit.render)
   .delete('/:id', remove)
   .get('/', login.render)
   .use(notFound)
@@ -148,6 +151,24 @@ function account(req, res, next){
         }
       });
   }
+
+function editUser(req, res){
+      let updateUser = {};
+        updateUser.name = req.body.name;
+        updateUser.age = req.body.age;
+        updateUser.description = req.body.description;
+  let query = {id:req.params.id}
+
+        // Schema create method om document in Mongo te zetten
+  User.update(query, updateUser, function(err){
+    if(err){
+      console.log(err);
+    return;
+    } else {
+      res.redirect('/account');
+    }
+  });
+};
 
 function remove(req, res, next) {
   var id = req.params.id
