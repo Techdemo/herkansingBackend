@@ -11,23 +11,23 @@ var User = require('../models/user')
 var db = mongoose.connection;
 
 
+function member(req, res, next) {
+  var id = req.params.id
 
+  db.collection('users').findOne({
+    _id: new mongo.ObjectID(id)
+  }, done)
 
-function members(req, res) {
-  db.collection('users').find().toArray(done)
-   function done(err, data) {
-     if(err) {
-       next(err)
-       } else {
-         res.render('list.ejs', {data: data})
-       }
-     }
-   }
+  function done(err, data) {
+    if (err) {
+      next(err)
+    } else {
+      res.render('detail.ejs', {data: data})
+    }
+  }
 
-
-
-
+}
 
 module.exports = {
-  render: members,
+  render: member
 }

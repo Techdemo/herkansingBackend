@@ -1,5 +1,25 @@
 <% include head.ejs %>
+<div class="container">
 <h1>Account overzicht</h1>
-<h2> <%= name %></h2>
-<h2> <%= description %></h2>
-<p>Hier is een overzicht van alle gegevens in je account</p>
+<h2>Hallo <%= name %> </h2>
+<p>Hier is een overzicht van alle gegevens in je account. Je kan gegevens aanpassen door op de wijzig knop te drukken.</p>
+
+  <div class="row">
+
+    <div class="input-field col s12">
+      <ul class="collection with-header">
+        <li class="collection-header"><h4>Accountgegevens van <%= name %></h4></li>
+        <li class="collection-item"><p>Naam: <i><b> <%= name %></b></i></p></li>
+        <li class="collection-item"><p>Leeftijd: <i><b> <%= age %></b></i></p></li>
+        <li class="collection-item"><p>Beschrijving: <i><b> <%= description %></b></i></p></li>
+        <li class="collection-item"><p>Gebruikersnaam: <i><b> <%= username %></b></i></p></li>
+      </ul>
+      <a href="" "waves-effect waves-light btn">Wijzig</a>
+
+  </div>
+
+  </div>
+</div>
+
+<!-- Alle modals -->
+<% include tail.ejs %>
