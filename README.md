@@ -72,18 +72,25 @@ The session collection is used when a user logs into the app. When the user logs
 - [MongoStore](9https://github.com/jdesboeufs/connect-mongo) let the user store the session in the mongo database.
 - [SocketIO](https://socket.io) used for the chat functionalities
 
+## sources of information
+- Youtube channel of The net Ninja
+- Examples from the backend classes by Titus Wormer
+- A lot of Stackoverflow
+- The Backend Slack channel
+- Github Dennis Wegereef
+
 Unfortunatly, there are still some things to do.
 
 - [ ] Let users choose their partner preferences
 - [ ] Let users only see other users, that match their preferences
 - [ ] Have a separate chat window, per user.
 - [ ] Finish log-out route **_currently working on this_**
+- [ ] Write middleware to handle the logout route.
+- [ ] Provide correct eror messages when the user doesn't fill in some form fields
+- [ ] Restructure code to make it more maintainable
 
 # personal opinion
 I've learned so much doing this assignment! Even though, I have the feeling I'm still not really far in learning express/node js. There is so much ground and information to cover!
 
-I had a lot of fun trying out different stuff and I'm proud of the socket io integration.
-
-But I am still a little bit disapointed that I didn't manage to create the feature to filter other users, based on their preferences.
-
-For now, I'm proud of the result and I will continue to work on this project. 
+I had a lot of fun trying out different stuff and I'm proud of the socket io integration.But I am still a little bit disapointed that I didn't manage to create the feature to filter other users, based on their preferences.
+For now, I'm proud of the result and I will continue to work on this project.
